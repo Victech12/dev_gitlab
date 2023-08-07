@@ -26,6 +26,10 @@ resource "aws_internet_gateway" "gw" {
   vpc_id = aws_vpc.my_vpc.id
 }
 
+resource "aws_nat_gateway" "dev_ngw" {
+  vpc_id = aws_vpc.my_vpc.id
+}
+
 resource "aws_route_table" "public_route_table" {
   vpc_id = aws_vpc.my_vpc.id
 }
