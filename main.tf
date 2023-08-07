@@ -62,7 +62,6 @@ resource "aws_security_group" "web_server_sg" {
 resource "aws_instance" "web_server" {
   ami           = "ami-0b594cc165f9cddaa"
   instance_type = "t2.micro"
-  count = aws_internet_gateway.gw(2)
   subnet_id     = aws_subnet.public_subnet.id
   vpc_security_group_ids = [aws_security_group.web_server_sg.id]
 
