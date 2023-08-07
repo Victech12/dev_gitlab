@@ -2,6 +2,7 @@ provider "aws" {
 
 }
 
+#Creating VPC
 resource "aws_vpc" "my_vpc" {
   cidr_block = "10.0.0.0/16"
   tags = {
@@ -9,6 +10,7 @@ resource "aws_vpc" "my_vpc" {
   }
 }
 
+#Creating public subnets
 resource "aws_subnet" "public_subnet" {
   vpc_id     = aws_vpc.my_vpc.id
   cidr_block = "10.0.1.0/24"
@@ -22,14 +24,17 @@ resource "aws_subnet" "private_subnet" {
   availability_zone = "eu-west-2b" 
 }
 
+#Creating internet gateway
 resource "aws_internet_gateway" "gw" {
   vpc_id = aws_vpc.my_vpc.id
 }
 
+#Creating nat gateway
 resource "aws_nat_gateway" "dev_ngw" {
   vpc_id = aws_vpc.my_vpc.id
 }
 
+#Creating route table
 resource "aws_route_table" "public_route_table" {
   vpc_id = aws_vpc.my_vpc.id
 }
@@ -40,11 +45,13 @@ resource "aws_route" "public_route" {
   gateway_id             = aws_internet_gateway.gw.id
 }
 
+#Assoiciating route to public subnet
 resource "aws_route_table_association" "public_subnet_association" {
   subnet_id      = aws_subnet.public_subnet.id
   route_table_id = aws_route_table.public_route_table.id
 }
 
+#Creating Security group
 resource "aws_security_group" "web_server_sg" {
   name_prefix = "web_server_sg_"
   vpc_id      = aws_vpc.my_vpc.id
